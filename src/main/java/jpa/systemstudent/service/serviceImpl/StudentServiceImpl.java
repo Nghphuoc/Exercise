@@ -2,9 +2,11 @@ package jpa.systemstudent.service.serviceImpl;
 
 import jpa.systemstudent.dto.StudentDto;
 import jpa.systemstudent.entity.Student;
+import jpa.systemstudent.exception.StudentNotFoundException;
 import jpa.systemstudent.mapper.StudentMapper;
 import jpa.systemstudent.repository.StudentRepository;
 import jpa.systemstudent.service.StudentService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,11 +30,13 @@ public class StudentServiceImpl implements StudentService {
         return students.stream().map(StudentMapper::mapStudent).collect(Collectors.toList());
     }
 
+    @SneakyThrows
     @Override
     public StudentDto getStudent(Long id) {
-        // có thể sử dụng optional ở đây tránh lỗi NullPointer
-        Student student = studentRepository.findById(id).orElseThrow(()->new RuntimeException("cannot found student with id: " + id));
-        return StudentMapper.mapStudent(student);
+        return studentRepository.findById(id)
+                .map(StudentMapper::mapStudent)
+                .orElseThrow(() -> new StudentNotFoundException(id));
+
     }
 
     @Override
@@ -42,10 +46,11 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public StudentDto UpdateStudent(Long id, StudentDto student) {
-        Student student1 = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
+        Student student1 = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
         student1.setStudentName(student.getStudentName());
         student1.setAge(student.getAge());
         student1.setAddress(student.getAddress());
