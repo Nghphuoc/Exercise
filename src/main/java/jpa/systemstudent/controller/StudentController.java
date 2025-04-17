@@ -57,30 +57,32 @@ public class StudentController {
     @PostMapping("/search")
     public ResponseEntity<Page<Student>> searchStudents(
             @RequestBody StudentDto request,
-            @RequestParam(defaultValue = "0") int page
-    ) {
+            @RequestParam(defaultValue = "0") int page) {
         Page<Student> result = studentService.searchStudents(request, page);
         return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody StudentDto studentDto) {
-        //check trùng email
-        List<StudentDto> studentDtos = studentService.getAllStudents();
-        for(StudentDto studentDto2 : studentDtos){
-            if(studentDto2.getEmail().equals(studentDto.getEmail())){
-                return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",HttpStatus.BAD_REQUEST);
-            }
-        }
-        // validate phone number
+        // check phone
         if(!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")){
             return new ResponseEntity<>("Phone number is not valid",HttpStatus.BAD_REQUEST);
         }
-        StudentDto studentDto1 = studentService.UpdateStudent(id,studentDto);
-        if(studentDto1 == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        //check trùng email
+        List<StudentDto> studentDtos = studentService.getAllStudents();
+
+        for(StudentDto studentDto2 : studentDtos){
+            // check mail trùng thì check tiếp
+            if(studentDto2.getEmail().equals(studentDto.getEmail())){
+                // check tiếp id nếu bằng thì cho update khác thì chắc chắn lad trùng với mail của người khácadd
+                if(studentDto2.getStudentId() == id){
+                    StudentDto studentDto1 = studentService.UpdateStudent(id,studentDto);
+                    return new ResponseEntity<>(studentDto1, HttpStatus.ACCEPTED);
+                }
+                return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",HttpStatus.BAD_REQUEST);
+            }
         }
-        return new ResponseEntity<>(studentDto1, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>("Student not found ", HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")

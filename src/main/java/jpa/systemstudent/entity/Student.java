@@ -26,7 +26,7 @@ public class Student {
     @Column(name = "age")
     private Integer age;
 
-    @Column(name = "email")
+    @Column(name = "email",unique = true)
     @NotBlank
     @Email
     private String email;
