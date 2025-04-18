@@ -2,7 +2,7 @@ package jpa.systemstudent.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import jpa.systemstudent.service.AuditorAwareImpl;
+import jpa.systemstudent.service.serviceImpl.AuditorAwareImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

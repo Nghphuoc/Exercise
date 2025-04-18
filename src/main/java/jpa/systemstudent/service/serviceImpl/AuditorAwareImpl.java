@@ -1,4 +1,4 @@
-package jpa.systemstudent.service;
+package jpa.systemstudent.service.serviceImpl;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;

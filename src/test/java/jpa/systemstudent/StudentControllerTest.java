@@ -17,11 +17,14 @@ import org.springframework.http.ResponseEntity;
 import uk.co.jemos.podam.api.PodamFactory;
 import uk.co.jemos.podam.api.PodamFactoryImpl;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -88,5 +91,76 @@ public class StudentControllerTest {
 
         assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
         assertEquals(studentDto, response.getBody());
+    }
+
+    @Test
+    void testGetAllStudents() {
+        List<StudentDto> studentDtos = Arrays.asList(studentDto);
+
+        // Mock method to return the list of students
+        when(studentService.getAllStudents()).thenReturn(studentDtos);
+
+        // Call the method in controller directly
+        ResponseEntity<List<StudentDto>> response = studentController.getAllStudents();
+
+        // Assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+        assertEquals("Nguyen", response.getBody().get(0).getStudentName());
+    }
+
+    @Test
+    void testGetStudentById() {
+        // Mock method to return a student by id
+        when(studentService.getStudent(1L)).thenReturn(studentDto);
+
+        // Call the method in controller directly
+        ResponseEntity<?> response = studentController.getStudentById(1L);
+
+        // Assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Nguyen", ((StudentDto) response.getBody()).getStudentName());
+    }
+
+    @Test
+    void testCreateStudent() {
+        // Mock the service method to save the student
+        when(studentService.saveStudent(studentDto)).thenReturn(studentDto);
+
+        // Call the method in controller directly
+        ResponseEntity<?> response = studentController.createStudent(studentDto);
+
+        // Assert the response
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Nguyen", ((StudentDto) response.getBody()).getStudentName());
+    }
+
+    @Test
+    void testCreateStudentWithInvalidPhoneNumber() {
+        // Modify studentDto to have an invalid phone number
+        studentDto.setPhoneNumber("invalidPhoneNumber");
+
+        // Call the method in controller directly
+        ResponseEntity<?> response = studentController.createStudent(studentDto);
+
+        // Assert the response
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals("Phone number is not valid", response.getBody());
+    }
+
+    @Test
+    void testDeleteStudent() {
+        // Mock the service method to delete the student
+        doNothing().when(studentService).deleteStudent(1L);
+
+        // Call the method in controller directly
+        ResponseEntity<?> response = studentController.deleteStudent(1L);
+
+        // Assert the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Delete successfully!!!", response.getBody());
     }
 }
