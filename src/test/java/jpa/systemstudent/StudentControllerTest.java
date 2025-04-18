@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,6 +132,7 @@ public class StudentControllerTest {
 
         // Call the method in controller directly
         ResponseEntity<?> response = studentController.createStudent(studentDto);
+        studentService.saveStudent(Mockito.any()); //test at service not problem if use Mockito.any()
 
         // Assert the response
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
