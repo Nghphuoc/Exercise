@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int studentId;
+    private Long studentId;
 
     @Column(name = "studentName")
     private String studentName;

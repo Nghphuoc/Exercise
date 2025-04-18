@@ -74,11 +74,12 @@ public class StudentController {
             // check mail trùng thì check tiếp
             if(studentDto2.getEmail().equals(studentDto.getEmail())){
                 // check tiếp id nếu bằng thì cho update khác thì chắc chắn lad trùng với mail của người khácadd
-                if(studentDto2.getStudentId() == id){
+                if(studentDto2.getStudentId().equals(id)){
                     StudentDto studentDto1 = studentService.UpdateStudent(id,studentDto);
                     return new ResponseEntity<>(studentDto1, HttpStatus.ACCEPTED);
                 }
-                return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",
+                        HttpStatus.BAD_REQUEST);
             }
         }
         // nếu không có mail nào trùng thì update
