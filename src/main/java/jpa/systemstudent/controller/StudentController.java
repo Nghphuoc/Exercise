@@ -22,6 +22,7 @@ public class StudentController {
     @GetMapping()
     public ResponseEntity<List<StudentDto>> getAllStudents() {
         List<StudentDto> studentDtos = studentService.getAllStudents();
+
         if(studentDtos.isEmpty()){
             return ResponseEntity.noContent().build();
         }
@@ -31,6 +32,7 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getStudentById(@PathVariable Long id) {
         StudentDto studentDto = studentService.getStudent(id);
+
         if(studentDto == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -41,23 +43,24 @@ public class StudentController {
     public ResponseEntity<?> createStudent(@RequestBody @Valid StudentDto studentDto) {
         //check trùng email
         List<StudentDto> studentDtos = studentService.getAllStudents();
+
         for(StudentDto studentDto2 : studentDtos){
             if(studentDto2.getEmail().equals(studentDto.getEmail())){
                 return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",HttpStatus.BAD_REQUEST);
             }
         }
+
         // check validate phone number
         if(!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")){
             return new ResponseEntity<>("Phone number is not valid",HttpStatus.BAD_REQUEST);
         }
+
         StudentDto studentDto1 = studentService.saveStudent(studentDto);
         return new ResponseEntity<>(studentDto1, HttpStatus.CREATED);
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Page<Student>> searchStudents(
-            @RequestBody StudentDto request,
-            @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<Page<Student>> searchStudents( @RequestBody StudentDto request, @RequestParam(defaultValue = "0") int page) {
         Page<Student> result = studentService.searchStudents(request, page);
         return ResponseEntity.ok(result);
     }

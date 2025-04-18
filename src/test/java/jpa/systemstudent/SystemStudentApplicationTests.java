@@ -10,5 +10,4 @@ class SystemStudentApplicationTests {
     void contextLoads() {
     }
 
-
 }
