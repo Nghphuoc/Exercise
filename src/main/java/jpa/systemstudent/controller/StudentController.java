@@ -70,7 +70,6 @@ public class StudentController {
         }
         //check trùng email
         List<StudentDto> studentDtos = studentService.getAllStudents();
-
         for(StudentDto studentDto2 : studentDtos){
             // check mail trùng thì check tiếp
             if(studentDto2.getEmail().equals(studentDto.getEmail())){
@@ -82,7 +81,9 @@ public class StudentController {
                 return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",HttpStatus.BAD_REQUEST);
             }
         }
-        return new ResponseEntity<>("Student not found ", HttpStatus.BAD_REQUEST);
+        // nếu không có mail nào trùng thì update
+        StudentDto studentDto1 = studentService.UpdateStudent(id,studentDto);
+        return new ResponseEntity<>(studentDto1, HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("/{id}")
