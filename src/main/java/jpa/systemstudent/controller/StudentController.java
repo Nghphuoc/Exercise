@@ -47,17 +47,17 @@ public class StudentController {
             if (!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")) {
                 return new ResponseEntity<>("Phone number is not valid", HttpStatus.BAD_REQUEST);
             }
+        }else {
+            return new ResponseEntity<>("Phone number is not valid", HttpStatus.BAD_REQUEST);
         }
+            //check trùng email
+            List<StudentDto> studentDtos = studentService.getAllStudents();
 
-        //check trùng email
-        List<StudentDto> studentDtos = studentService.getAllStudents();
-
-        for(StudentDto studentDto2 : studentDtos){
-            if(studentDto2.getEmail().equals(studentDto.getEmail())){
-                return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",HttpStatus.BAD_REQUEST);
+            for (StudentDto studentDto2 : studentDtos) {
+                if (studentDto2.getEmail().equals(studentDto.getEmail())) {
+                    return new ResponseEntity<>("Student with email= " + studentDto.getEmail() + " already existed", HttpStatus.BAD_REQUEST);
+                }
             }
-        }
-
         StudentDto studentDto1 = studentService.saveStudent(studentDto);
         return new ResponseEntity<>(studentDto1, HttpStatus.CREATED);
     }
@@ -75,6 +75,8 @@ public class StudentController {
             if (!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")) {
                 return new ResponseEntity<>("Phone number is not valid", HttpStatus.BAD_REQUEST);
             }
+        }else {
+            return new ResponseEntity<>("Age much more 18 and lest than 80", HttpStatus.BAD_REQUEST);
         }
         //check trùng email
         List<StudentDto> studentDtos = studentService.getAllStudents();

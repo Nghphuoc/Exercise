@@ -40,7 +40,6 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>
-
         <!-- Hoặc Hibernate Validator -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -57,6 +56,12 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.3.0</version> <!-- Khuyến nghị dùng bản ổn định này -->
         </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-envers</artifactId>
+            <version>6.4.4.Final</version> <!-- phải đồng bộ với Hibernate Core -->
+        </dependency>
+
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>

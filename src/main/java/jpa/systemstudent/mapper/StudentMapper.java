@@ -12,7 +12,11 @@ public class StudentMapper {
                 studentDto.getEmail(),
                 studentDto.getAddress(),
                 studentDto.getBirthday(),
-                studentDto.getPhoneNumber()
+                studentDto.getPhoneNumber(),
+                studentDto.getCreatedDate(),
+                studentDto.getLastModifiedDate(),
+                studentDto.getCreatedBy(),
+                studentDto.getLastModifiedBy()
         );
     }
 
@@ -24,7 +28,11 @@ public class StudentMapper {
                 student.getEmail(),
                 student.getAddress(),
                 student.getBirthday(),
-                student.getPhoneNumber()
+                student.getPhoneNumber(),
+                student.getCreatedDate(),
+                student.getLastModifiedDate(),
+                student.getCreatedBy(),
+                student.getLastModifiedBy()
         );
     }
 }
