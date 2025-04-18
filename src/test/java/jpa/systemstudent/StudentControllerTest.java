@@ -14,6 +14,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import uk.co.jemos.podam.api.PodamFactory;
+import uk.co.jemos.podam.api.PodamFactoryImpl;
 
 import java.util.List;
 
@@ -67,15 +69,10 @@ public class StudentControllerTest {
     @DisplayName("duplicate email when update")
     @Test
     void testUpdateStudent_EmailDuplicate() {
-        StudentDto otherStudent = new StudentDto();
-        otherStudent.setStudentId(1L);
-        otherStudent.setEmail("test@example.com");
-        otherStudent.setPhoneNumber("+841234567890");
-        otherStudent.setStudentName("Nguyen");
-        otherStudent.setAge(19);
-        otherStudent.setAddress("18 HCM");
+        PodamFactory factory = new PodamFactoryImpl();
+        StudentDto student = factory.manufacturePojo(StudentDto.class);
 
-        when(studentService.getAllStudents()).thenReturn(List.of(otherStudent));
+        when(studentService.getAllStudents()).thenReturn(List.of(student));
 
         ResponseEntity<?> response = studentController.updateStudent(1L, studentDto);
 

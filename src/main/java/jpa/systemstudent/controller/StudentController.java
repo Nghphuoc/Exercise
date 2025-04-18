@@ -41,6 +41,13 @@ public class StudentController {
 
     @PostMapping()
     public ResponseEntity<?> createStudent(@RequestBody @Valid StudentDto studentDto) {
+        // check validate phone number
+        if (18 < studentDto.getAge() && studentDto.getAge() < 80) {
+            if (!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")) {
+                return new ResponseEntity<>("Phone number is not valid", HttpStatus.BAD_REQUEST);
+            }
+        }
+
         //check trùng email
         List<StudentDto> studentDtos = studentService.getAllStudents();
 
@@ -48,11 +55,6 @@ public class StudentController {
             if(studentDto2.getEmail().equals(studentDto.getEmail())){
                 return new ResponseEntity<>("Student with email= "+ studentDto.getEmail()+" already existed",HttpStatus.BAD_REQUEST);
             }
-        }
-
-        // check validate phone number
-        if(!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")){
-            return new ResponseEntity<>("Phone number is not valid",HttpStatus.BAD_REQUEST);
         }
 
         StudentDto studentDto1 = studentService.saveStudent(studentDto);
@@ -67,9 +69,11 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody StudentDto studentDto) {
-        // check phone
-        if(!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")){
-            return new ResponseEntity<>("Phone number is not valid",HttpStatus.BAD_REQUEST);
+        // check validate phone number and age
+        if (18 < studentDto.getAge() && studentDto.getAge() < 80) {
+            if (!studentDto.getPhoneNumber().matches("^\\+84\\d{10}$")) {
+                return new ResponseEntity<>("Phone number is not valid", HttpStatus.BAD_REQUEST);
+            }
         }
         //check trùng email
         List<StudentDto> studentDtos = studentService.getAllStudents();
